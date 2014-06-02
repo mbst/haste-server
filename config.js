@@ -5,7 +5,7 @@
 
   "keyLength": 10,
 
-  "maxLength": 400000,
+  "maxLength": 4000000,
 
   "staticMaxAge": 86400,
 
@@ -13,7 +13,7 @@
 
   "logging": [
     {
-      "level": "verbose",
+      "level": "info",
       "type": "Console",
       "colorize": true
     }
@@ -24,11 +24,8 @@
   },
 
   "storage": {
-    "type": "redis",
-    "host": "0.0.0.0",
-    "port": 6379,
-    "db": 2,
-    "expire": 2592000
+    "type" : "file",
+    "path" : "./data"
   },
 
   "documents": {

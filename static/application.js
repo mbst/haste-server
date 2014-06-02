@@ -1,6 +1,7 @@
 ///// represents a single document
 
-var haste_document = function() {
+var haste_document = function(app) {
+  this.$app = app;
   this.locked = false;
 };
 
@@ -23,26 +24,39 @@ haste_document.prototype.load = function(key, callback, lang) {
       _this.locked = true;
       _this.key = key;
       _this.data = res.data;
-      try {
-        var high;
-        if (lang === 'txt') {
-          high = { value: _this.htmlEscape(res.data) };
-        }
-        else if (lang) {
-          high = hljs.highlight(lang, res.data);
-        }
-        else {
-          high = hljs.highlightAuto(res.data);
-        }
-      } catch(err) {
-        // failed highlight, fall back on auto
-        high = hljs.highlightAuto(res.data);
+
+      if(_this.$app.$hc.isConsoleMode()) {
+      	// no highlighting for console mode
+      	var high = { value: _this.$app.$hc.process(res.data) };
+      	
+      	// TODO: colour codes?
+
+      	_this.$app.$hc.uiShow();
       }
+      else {
+      	  _this.$app.$hc.uiHide();
+
+	      try {
+	        var high;
+	        if (lang === 'txt') {
+	          high = { value: _this.htmlEscape(res.data) };
+	        }
+	        else if (lang) {
+	          high = hljs.highlight(lang, res.data);
+	        }
+	        else {
+	          high = hljs.highlightAuto(res.data);
+	        }
+	      } catch(err) {
+	        // failed highlight, fall back on auto
+	        high = hljs.highlightAuto(res.data);
+	      }
+	  }
       callback({
         value: high.value,
         key: key,
         language: high.language || lang,
-        lineCount: res.data.split("\n").length
+        lineCount: high.value.split("\n").length
       });
     },
     error: function(err) {
@@ -89,6 +103,11 @@ haste_document.prototype.save = function(data, callback) {
 
 var haste = function(appName, options) {
   this.appName = appName;
+
+  if(typeof haste_console == 'function') {
+    this.$hc = new haste_console({});
+  }
+
   this.$textarea = $('textarea');
   this.$box = $('#box');
   this.$code = $('#box code');
@@ -119,12 +138,12 @@ haste.prototype.showMessage = function(msg, cls) {
 
 // Show the light key
 haste.prototype.lightKey = function() {
-  this.configureKey(['new', 'save']);
+  this.configureKey(['new', 'save', 'console']);
 };
 
 // Show the full key
 haste.prototype.fullKey = function() {
-  this.configureKey(['new', 'duplicate', 'twitter', 'raw']);
+  this.configureKey(['new', 'duplicate', 'twitter', 'raw', 'console']);
 };
 
 // Set the key up for certain things to be enabled
@@ -146,7 +165,7 @@ haste.prototype.configureKey = function(enable) {
 // and set up for a new one
 haste.prototype.newDocument = function(hideHistory) {
   this.$box.hide();
-  this.doc = new haste_document();
+  this.doc = new haste_document(this);
   if (!hideHistory) {
     window.history.pushState(null, this.appName, '/');
   }
@@ -207,7 +226,7 @@ haste.prototype.loadDocument = function(key) {
   var parts = key.split('.', 2);
   // Ask for what we want
   var _this = this;
-  _this.doc = new haste_document();
+  _this.doc = new haste_document(this);
   _this.doc.load(parts[0], function(ret) {
     if (ret) {
       _this.$code.html(ret.value);
@@ -302,6 +321,22 @@ haste.prototype.configureButtons = function() {
       shortcutDescription: 'control + shift + r',
       action: function() {
         window.location.href = '/raw/' + _this.doc.key;
+      }
+    },
+    {
+      $where: $('#box2 .console'),
+      label: 'Console output',
+      shortcut: function(evt) {
+        return evt.ctrlKey && evt.shiftKey && evt.keyCode === 67;
+      },
+      shortcutDescription: 'control + shift + c',
+      action: function() {
+      	if(location.hash.indexOf('console:') >= 0) {
+      		location = location.pathname;
+      	}
+      	else {
+        	location.hash = 'console:';
+        }
       }
     },
     {

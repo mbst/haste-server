@@ -7,9 +7,13 @@
 		<link rel="stylesheet" type="text/css" href="solarized_dark.css"/>
 		<link rel="stylesheet" type="text/css" href="application.css"/>
 
+		<link rel="stylesheet" type="text/css" href="console.css"/>
+
 		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
 		<script type="text/javascript" src="highlight.min.js"></script>
 		<script type="text/javascript" src="application.min.js"></script>
+
+		<script type="text/javascript" src="console.js"></script>
 
 		<meta name="robots" content="noindex,nofollow"/>
 
@@ -31,7 +35,7 @@
 			}, 1000);
 			// Construct app and load initial path
 			$(function() {
-				app = new haste('hastebin', { twitter: true });
+				app = new haste('hastebin', { twitter: false });
 				handlePop({ target: window });
 			});
 		</script>
@@ -51,6 +55,7 @@
 				<div class="new function"></div>
 				<div class="duplicate function"></div>
 				<div class="raw function"></div>
+				<div class="console function"></div>
 				<div class="twitter function"></div>
 			</div>
 			<div id="box3" style="display:none;">
@@ -62,6 +67,20 @@
 		<div id="linenos"></div>
 		<pre id="box" style="display:none;" tabindex="0"><code></code></pre>
 		<textarea spellcheck="false" style="display:none;"></textarea>
+
+		<div id="console_ui">
+			<ul class="active">
+			</ul>
+			<ul><li>
+				<select class="new">
+					<option value="">New op..</option>
+					<option value="sort">sort</option>
+					<option value="sortn">sortn</option>
+					<option value="reverse">reverse</option>
+					<option value="uniqc">uniqc</option>
+				</select>
+			</li></ul>
+		</div>
 
 	</body>
 
