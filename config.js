@@ -3,6 +3,14 @@
   "host": "0.0.0.0",
   "port": 7777,
 
+  "auth": {
+    "type": "none",
+    "users": {
+      "test": "test",
+      "foo": "bar"
+    }
+  },
+
   "keyLength": 10,
 
   "maxLength": 4000000,
@@ -13,7 +21,7 @@
 
   "logging": [
     {
-      "level": "info",
+      "level": "verbose",
       "type": "Console",
       "colorize": true
     }

@@ -12,6 +12,17 @@ var config = JSON.parse(fs.readFileSync('./config.js', 'utf8'));
 config.port = process.env.PORT || config.port || 7777;
 config.host = process.env.HOST || config.host || 'localhost';
 
+var authCheck = function(user, pass) {
+  if(typeof config.auth == 'undefined' || config.auth.type == 'none') return true;
+
+  if(config.auth.type == 'config') {
+    return config.auth.users[user] == pass;
+  }
+  else {
+    return false;
+  }
+};
+
 // Set up the logger
 if (config.logging) {
   try {
@@ -101,6 +112,9 @@ var documentHandler = new DocumentHandler({
 
 // Set the server up with a static cache
 connect.createServer(
+
+  connect.basicAuth(authCheck),
+
   // First look for api calls
   connect.router(function(app) {
     // get raw documents - support getting with extension
