@@ -27,10 +27,13 @@ haste_document.prototype.load = function(key, callback, lang) {
 
       if(_this.$app.$hc.isConsoleMode()) {
       	// no highlighting for console mode
-      	var high = { value: _this.$app.$hc.process(res.data) };
+      	var high = {
+      		value:
+      			_this.$app.$hc.colour(
+      				_this.$app.$hc.operate(res.data)
+      			)
+      	};
       	
-      	// TODO: colour codes?
-
       	_this.$app.$hc.uiShow();
       }
       else {

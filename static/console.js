@@ -94,10 +94,8 @@ haste_console.prototype.getArgs = function() {
 	}
 };
 
-haste_console.prototype.process = function(input) {
+haste_console.prototype.operate = function(input) {
 	var ops = this.getArgs();
-
-	console.log("Processing console doc with " + ops);
 
 	this.uiUpdate();
 
@@ -111,7 +109,58 @@ haste_console.prototype.process = function(input) {
 	return input;
 };
 
+haste_console.prototype.colour = function(input) {
+	var output = '';
 
+	var flags = {};
+
+	var classmap = {
+		'1' : 'b',
+		'4' : 'u',
+		'1;30' : 'blk',
+		'1;31' : 'lred',
+		'1;32' : 'lgrn',
+		'1;33' : 'lyel',
+		'1;34' : 'lblu',
+		'1;35' : 'lpnk',
+		'1;36' : 'lcya',
+		'1;37' : 'lwht',
+		'2;30' : 'blk',
+		'2;31' : 'dred',
+		'2;32' : 'dgrn',
+		'2;33' : 'dyel',
+		'2;34' : 'dblu',
+		'2;35' : 'dpnk',
+		'2;36' : 'dcya',
+		'2;37' : 'dwht',
+	}
+
+	var fn = function(str, p1, p2, offset, s) {
+		//console.log([p1, flags]);
+
+		if(p1 == '0') {
+			if(Object.keys(flags).length > 0) {
+				flags = {};
+				return '</i>';
+			}
+			else return '';
+		}
+
+		var ret = Object.keys(flags).length > 0 ? '</i>' : '';
+
+		if(typeof(classmap[p1]) == 'string') {
+			flags[ classmap[p1] ] = 1;
+		}
+
+		var classes = $.map(Object.keys(flags), function(x) { return '_'+x; });
+
+		ret += '<i class="' + classes.join(' ') + '">';
+
+		return ret;
+	};
+
+	return input.replace(/\x1B\[([01](;[0-9]+)?)m/g, fn);
+}
 
 /// ops
 
