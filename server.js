@@ -14,29 +14,6 @@ var config = JSON.parse(fs.readFileSync('./config.js', 'utf8'));
 config.port = process.env.PORT || config.port || 7777;
 config.host = process.env.HOST || config.host || 'localhost';
 
-var authCheck = function(user, pass) {
-  if(typeof config.auth == 'undefined') return true;
-
-  if(config.auth.type == 'users') {
-    return config.auth.users[user] == pass;
-  }
-  else if(config.auth.type == 'htpasswd') {
-    var lines = fs.readFileSync(config.auth.htpasswd, 'utf8').split("\n");
-    for(var i in lines) {
-      var f = lines[i].split(":");
-      if(f.length == 2) {
-        if(f[0] == user) {
-          return crypt(pass, f[1]) == f[1];
-        }
-      }
-    }
-    return false;
-  }
-  else {
-    return true;
-  }
-};
-
 // Set up the logger
 if (config.logging) {
   try {
@@ -124,10 +101,40 @@ var documentHandler = new DocumentHandler({
   keyGenerator: keyGenerator
 });
 
+
+var authType = typeof(config.auth) == 'undefined' ? null : config.auth.type;
+
+var authCheck = (authType == 'users' || authType == 'htpasswd')
+ ? connect.basicAuth(function(user, pass) {
+  if(config.auth.type == 'users') {
+    return config.auth.users[user] == pass;
+  }
+  else if(config.auth.type == 'htpasswd') {
+    var lines = fs.readFileSync(config.auth.htpasswd, 'utf8').split("\n");
+    for(var i in lines) {
+      var f = lines[i].split(":");
+      if(f.length == 2) {
+        if(f[0] == user) {
+          return crypt(pass, f[1]) == f[1];
+        }
+      }
+    }
+    return false;
+  }
+  else {
+    // unrecognised db type
+    return false;
+  }
+ })
+ : function(req, res, next) { next(); };
+
+winston.info("http authentication type: " + authType);
+
+
 // Set the server up with a static cache
 connect.createServer(
 
-  connect.basicAuth(authCheck),
+  authCheck,
 
   // First look for api calls
   connect.router(function(app) {

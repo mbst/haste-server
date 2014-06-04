@@ -5,7 +5,7 @@
 
   "auth": {
     "type": "none",
-    "htpasswd": "./htpasswd",
+    "htpasswd": "./htpasswd.sha512.txt",
     "users": {
       "test": "test",
       "foo": "bar"
