@@ -28,10 +28,7 @@ haste_document.prototype.load = function(key, callback, lang) {
       if(_this.$app.$hc.isConsoleMode()) {
       	// no highlighting for console mode
       	var high = {
-      		value:
-      			_this.$app.$hc.colour(
-      				_this.$app.$hc.operate(res.data)
-      			)
+      		value: _this.$app.$hc.operate(res.data)
       	};
       	
       	_this.$app.$hc.uiShow();

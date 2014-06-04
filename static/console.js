@@ -106,7 +106,12 @@ haste_console.prototype.operate = function(input) {
 		}
 	}
 
-	return input;
+	if(ops == null || ops.length == 0) {
+		return this.colour(input);
+	}
+	else {
+		return input;
+	}
 };
 
 haste_console.prototype.colour = function(input) {
