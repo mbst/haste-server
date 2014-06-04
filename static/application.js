@@ -107,9 +107,7 @@ haste_document.prototype.save = function(data, callback) {
 var haste = function(appName, options) {
   this.appName = appName;
 
-  if(typeof haste_console == 'function') {
-    this.$hc = new haste_console({});
-  }
+  this.$hc = new haste_console({});
 
   this.$textarea = $('textarea');
   this.$box = $('#box');
