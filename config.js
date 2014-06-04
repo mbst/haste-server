@@ -5,6 +5,7 @@
 
   "auth": {
     "type": "none",
+    "htpasswd": "./htpasswd",
     "users": {
       "test": "test",
       "foo": "bar"

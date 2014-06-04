@@ -5,6 +5,8 @@ var fs = require('fs');
 var winston = require('winston');
 var connect = require('connect');
 
+var crypt = require("crypt3");
+
 var DocumentHandler = require('./lib/document_handler');
 
 // Load the configuration and set some defaults
@@ -13,13 +15,25 @@ config.port = process.env.PORT || config.port || 7777;
 config.host = process.env.HOST || config.host || 'localhost';
 
 var authCheck = function(user, pass) {
-  if(typeof config.auth == 'undefined' || config.auth.type == 'none') return true;
+  if(typeof config.auth == 'undefined') return true;
 
-  if(config.auth.type == 'config') {
+  if(config.auth.type == 'users') {
     return config.auth.users[user] == pass;
   }
-  else {
+  else if(config.auth.type == 'htpasswd') {
+    var lines = fs.readFileSync(config.auth.htpasswd, 'utf8').split("\n");
+    for(var i in lines) {
+      var f = lines[i].split(":");
+      if(f.length == 2) {
+        if(f[0] == user) {
+          return crypt(pass, f[1]) == f[1];
+        }
+      }
+    }
     return false;
+  }
+  else {
+    return true;
   }
 };
 
