@@ -61,20 +61,14 @@ body.console #box {
 
 #box i { font-style: normal; }
 #box i._b { font-weight: bold; }
+#box i._d { font-weight: dim; }
 #box i._u { text-decoration: underline; }
 #box i._blk { color: black; }
-#box i._lred { font-weight: bold; color: red; }
-#box i._lgrn { font-weight: bold; color: green; }
-#box i._lyel { font-weight: bold; color: yellow; }
-#box i._lblu { font-weight: bold; color: blue; }
-#box i._lpnk { font-weight: bold; color: magenta; }
-#box i._lcya { font-weight: bold; color: cyan; }
-#box i._lwht { font-weight: bold; color: white; }
-#box i._dred { font-weight: normal; color: red; }
-#box i._dgrn { font-weight: normal; color: green; }
-#box i._dyel { font-weight: normal; color: yellow; }
-#box i._dblu { font-weight: normal; color: blue; }
-#box i._dpnk { font-weight: normal; color: magenta; }
-#box i._dcya { font-weight: normal; color: cyan; }
-#box i._dwht { font-weight: normal; color: white; }
+#box i._red { color: red; }
+#box i._grn { color: green; }
+#box i._yel { color: yellow; }
+#box i._blu { color: blue; }
+#box i._pnk { color: magenta; }
+#box i._cya { color: cyan; }
+#box i._wht { color: white; }
 

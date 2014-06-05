@@ -115,56 +115,51 @@ haste_console.prototype.operate = function(input) {
 };
 
 haste_console.prototype.colour = function(input) {
+	var classmap = {
+		'1' : 'b',
+		'2' : 'd',
+		'4' : 'u',
+		'30' : 'blk',
+		'31' : 'red',
+		'32' : 'grn',
+		'33' : 'yel',
+		'34' : 'blu',
+		'35' : 'pnk',
+		'36' : 'cya',
+		'37' : 'wht',
+	}
+
 	var output = '';
 
 	var flags = {};
 
-	var classmap = {
-		'1' : 'b',
-		'4' : 'u',
-		'1;30' : 'blk',
-		'1;31' : 'lred',
-		'1;32' : 'lgrn',
-		'1;33' : 'lyel',
-		'1;34' : 'lblu',
-		'1;35' : 'lpnk',
-		'1;36' : 'lcya',
-		'1;37' : 'lwht',
-		'2;30' : 'blk',
-		'2;31' : 'dred',
-		'2;32' : 'dgrn',
-		'2;33' : 'dyel',
-		'2;34' : 'dblu',
-		'2;35' : 'dpnk',
-		'2;36' : 'dcya',
-		'2;37' : 'dwht',
-	}
-
-	var fn = function(str, p1, p2, offset, s) {
-		//console.log([p1, flags]);
-
-		if(p1 == '0') {
-			if(Object.keys(flags).length > 0) {
-				flags = {};
-				return '</i>';
-			}
-			else return '';
-		}
+	var fn = function(str, p1, offset, s) {
+		//console.log([str, p1, flags]);
 
 		var ret = Object.keys(flags).length > 0 ? '</i>' : '';
 
-		if(typeof(classmap[p1]) == 'string') {
-			flags[ classmap[p1] ] = 1;
+		$( p1.split(';') ).each(function(i,x) {
+			if(x == 0) {
+				flags = {};
+			}
+			else if(typeof(classmap[x]) == 'string') {
+				flags[ classmap[x] ] = 1;
+			}
+			if(x == 0) {
+				
+			}
+		});
+
+		if(Object.keys(flags).length > 0) {
+			var classes = $.map(Object.keys(flags), function(x) { return '_'+x; });
+			ret += '<i class="' + classes.join(' ') + '">';
+			//console.log(['Code', p1, classes.join(' ')]);
 		}
-
-		var classes = $.map(Object.keys(flags), function(x) { return '_'+x; });
-
-		ret += '<i class="' + classes.join(' ') + '">';
 
 		return ret;
 	};
 
-	return input.replace(/\x1B\[([01](;[0-9]+)?)m/g, fn);
+	return input.replace(/\x1B\[([0-9;]+)m/g, fn);
 }
 
 /// ops
