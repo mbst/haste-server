@@ -58,11 +58,12 @@ body.console #box {
 	background-position: -190px bottom;
 }
 
-
+<!-- default -->
 #box i { font-style: normal; }
+<!-- styles -->
 #box i._b { font-weight: bold; }
-#box i._d { font-weight: dim; }
 #box i._u { text-decoration: underline; }
+<!-- plain colours -->
 #box i._blk { color: black; }
 #box i._red { color: red; }
 #box i._grn { color: green; }
@@ -71,4 +72,12 @@ body.console #box {
 #box i._pnk { color: magenta; }
 #box i._cya { color: cyan; }
 #box i._wht { color: white; }
+<!-- dim colours -->
+#box i._d._red { color: darkred; }
+#box i._d._grn { color: darkgreen; }
+#box i._d._yel { color: orange; }
+#box i._d._blu { color: darkblue; }
+#box i._d._pnk { color: darkmagenta; }
+#box i._d._cya { color: darkcyan; }
+#box i._d._wht { color: grey; }
 

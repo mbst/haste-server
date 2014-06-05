@@ -134,20 +134,19 @@ haste_console.prototype.colour = function(input) {
 	var flags = {};
 
 	var fn = function(str, p1, offset, s) {
-		//console.log([str, p1, flags]);
+		//console.log([str, p1, flags, s]);
 
 		var ret = Object.keys(flags).length > 0 ? '</i>' : '';
 
-		$( p1.split(';') ).each(function(i,x) {
-			if(x == 0) {
-				flags = {};
-			}
-			else if(typeof(classmap[x]) == 'string') {
-				flags[ classmap[x] ] = 1;
-			}
-			if(x == 0) {
-				
-			}
+		$( str.substr(2, str.length-2-1).split("m\x1B[") ).each(function(i,x) {
+			$( x.split(';') ).each(function(i,x) {
+				if(x == 0) {
+					flags = {};
+				}
+				else if(typeof(classmap[x]) == 'string') {
+					flags[ classmap[x] ] = 1;
+				}
+			});
 		});
 
 		if(Object.keys(flags).length > 0) {
@@ -159,7 +158,7 @@ haste_console.prototype.colour = function(input) {
 		return ret;
 	};
 
-	return input.replace(/\x1B\[([0-9;]+)m/g, fn);
+	return input.replace(/(\x1B\[([0-9;]+)m)+/g, fn);
 }
 
 /// ops
