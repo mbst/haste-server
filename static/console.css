@@ -16,7 +16,7 @@
 	display:none;
 }
 
-body.console { background: #333; }
+body.console { background: #012; }
 body.console #console_ui {
 	display: block;
 }
