@@ -110,9 +110,13 @@ haste_console.prototype.operate = function(input) {
 		return this.colour(input);
 	}
 	else {
-		return input;
+		return this.removeColor(input);
 	}
 };
+
+haste_console.prototype.removeColor = function(input) {
+	return input.replace(/\x1B\[[0-9;]+m/g, '');
+}
 
 haste_console.prototype.colour = function(input) {
 	var classmap = {
@@ -158,7 +162,7 @@ haste_console.prototype.colour = function(input) {
 		return ret;
 	};
 
-	return input.replace(/(\x1B\[([0-9;]+)m)+/g, fn);
+	return input.replace(/(\x1B\[[0-9;]+m)+/g, fn);
 }
 
 /// ops
