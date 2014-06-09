@@ -12,7 +12,7 @@ var haste_console = function(options) {
 		'sort' : 'opSort',
 		'sortn' : 'opSortNumeric',
 		'reverse' : 'opReverse',
-		'test' : 'opWrap'
+		'mono' : 'opNoop',
 	};
 
 	this.uiInit();
@@ -167,8 +167,8 @@ haste_console.prototype.colour = function(input) {
 
 /// ops
 
-haste_console.prototype.opTest = function(input) {
-	return $.map(input.split(this.d), function(line) { return '['+line+']'; }).join(this.d);
+haste_console.prototype.opNoop = function(input) {
+	return input;
 };
 
 haste_console.prototype.opSort = function(input) {

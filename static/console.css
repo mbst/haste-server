@@ -39,14 +39,23 @@ body.console #box {
 	float: left;
 	padding: 0.1em;
 	margin: 0.2em;
+}
+#console_ui ul.active li {
 	background: #cdc;
 	border-radius: 0.3em;
 }
-
-#console_ui ul li a.x {
+#console_ui ul.active li a.x {
 	margin-left: 0.2em;
 	text-decoration: none;
 }
+#console_ui ul.heading li {
+	font-family: monospace;
+	color: white;
+	background: black;
+	padding: 0.2em;
+	border-radius: 0.2em;
+}
+
 
 
 #box2 .function.console {
