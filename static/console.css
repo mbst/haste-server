@@ -47,6 +47,7 @@ body.console #box {
 #console_ui ul.active li a.x {
 	margin-left: 0.2em;
 	text-decoration: none;
+	color: black;
 }
 #console_ui ul.heading li {
 	font-family: monospace;
