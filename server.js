@@ -104,31 +104,49 @@ var documentHandler = new DocumentHandler({
 
 var authType = typeof(config.auth) == 'undefined' ? null : config.auth.type;
 
-var authCheck = (authType == 'users' || authType == 'htpasswd')
- ? connect.basicAuth(function(user, pass) {
-  if(config.auth.type == 'users') {
-    return config.auth.users[user] == pass;
-  }
-  else if(config.auth.type == 'htpasswd') {
-    var lines = fs.readFileSync(config.auth.htpasswd, 'utf8').split("\n");
-    for(var i in lines) {
-      var f = lines[i].split(":");
-      if(f.length == 2) {
-        if(f[0] == user) {
-          return crypt(pass, f[1]) == f[1];
-        }
-      }
-    }
-    return false;
-  }
-  else {
-    // unrecognised db type
-    return false;
-  }
- })
- : function(req, res, next) { next(); };
-
 winston.info("http authentication type: " + authType);
+
+var authCheck = function(req, res, next) { next(); }; // default
+
+if(authType == 'users' || authType == 'htpasswd') {
+  authCheck = function(req, res, next) {
+    if(typeof(config.auth.ipwhitelist) != 'undefined' && config.auth.ipwhitelist.indexOf(req.connection.remoteAddress) > -1) {
+      winston.debug("request from whitelisted address: " + req.connection.remoteAddress);
+
+      return next();
+    }
+    else {
+      winston.debug("request from non-whitelisted address: " + req.connection.remoteAddress);
+
+      var basicCheck = connect.basicAuth(function(user, pass) {
+        winston.debug("authenticating user: " + user + " from " + req.connection.remoteAddress);
+
+        if(config.auth.type == 'users') {
+          return config.auth.users[user] == pass;
+        }
+        else if(config.auth.type == 'htpasswd') {
+          var lines = fs.readFileSync(config.auth.htpasswd, 'utf8').split("\n");
+          for(var i in lines) {
+            var f = lines[i].split(":");
+            if(f.length == 2) {
+              if(f[0] == user) {
+                return crypt(pass, f[1]) == f[1];
+              }
+            }
+          }
+          return false;
+        }
+        else {
+          // unrecognised db type
+          return false;
+        }
+      });
+
+      return basicCheck(req, res, next);
+    }
+  };
+}
+
 
 
 // Set the server up with a static cache
