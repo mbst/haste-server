@@ -6,10 +6,8 @@
   "auth": {
     "type": "none",
     "ipwhitelist": [],
-    "htpasswd": "./htpasswd.sha512.txt",
     "users": {
-      "test": "test",
-      "foo": "bar"
+      "test": "test"
     }
   },
 
