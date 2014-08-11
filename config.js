@@ -17,7 +17,7 @@
 
   "staticMaxAge": 86400,
 
-  "recompressStaticAssets": true,
+  "recompressStaticAssets": false,
 
   "logging": [
     {
