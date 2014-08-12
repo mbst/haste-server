@@ -82,11 +82,15 @@ haste_console.prototype.setArgs = function(args) {
 };
 
 haste_console.prototype.getArgs = function() {
-	var tag = 'console:';
+	var tag = 'console';
+	var tagc = tag+':';
 	var lochash = location.hash.substr(1);
-	var p = lochash.indexOf(tag);
-	if(p >= 0) {
-		var sub = lochash.substr(p+tag.length);
+	var p = lochash.indexOf(tagc);
+	if(lochash == tag || lochash == tagc) {
+		return [];
+	}
+	else if(p >= 0) {
+		var sub = lochash.substr(p+tagc.length);
 		return sub.length == 0 ? [] : sub.split(',');
 	}
 	else {
