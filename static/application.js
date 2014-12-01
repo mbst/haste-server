@@ -107,12 +107,12 @@ var haste = function(appName, options) {
   this.$hc = new haste_console({});
 
   // subset of supported languages for autodetection. the heck is avrasm?!
-  hljs.configure({
+  /*hljs.configure({
     languages: [
 	  'apache', 'bash', 'coffee', 'cpp', 'cs', 'css', 'diff', 'go', 'ini', 'java',
 	  'javascript', 'markdown', 'nginx', 'objectivec', 'perl', 'php',
 	  'python', 'ruby', 'scala', 'sql', 'xml']
-  });
+  });*/
 
   this.$textarea = $('textarea');
   this.$box = $('#box');
