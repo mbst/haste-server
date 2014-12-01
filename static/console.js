@@ -155,7 +155,7 @@ haste_console.prototype.colour = function(input) {
 
 		$( str.substr(2, str.length-2-1).split("m\x1B[") ).each(function(i,x) {
 			$( x.split(';') ).each(function(i,x) {
-				if(x == 0) {
+				if(x == 0 || x == 39) {
 					flags = {};
 				}
 				else if(typeof(classmap[x]) == 'string') {
