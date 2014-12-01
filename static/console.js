@@ -98,10 +98,17 @@ haste_console.prototype.getArgs = function() {
 	}
 };
 
+haste_console.prototype.escapeHTML = function(input) {
+	// simple escaping to replace < > &
+	return input.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;') ;
+}
+
 haste_console.prototype.operate = function(input) {
 	var ops = this.getArgs();
 
 	this.uiUpdate();
+
+	input = this.escapeHTML(input);
 
 	for(var i in ops) {
 		var fname = this.opMap[ ops[i] ];
